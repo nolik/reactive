@@ -9,17 +9,12 @@ import reactor.core.publisher.Flux;
 @Component
 @RequiredArgsConstructor
 public class Initializer implements ApplicationRunner {
-
     private final UserRepository userRepository;
-
-    public Initializer(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         Flux.just("Ihar", "Vasia", "Petua")
-                .map(User::new)
+                .map(username -> new User(null, username))
                 .flatMap(userRepository::save)
                 .thenMany(userRepository.findAll())
                 .subscribe(System.out::println);
