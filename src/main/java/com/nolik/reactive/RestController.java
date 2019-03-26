@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 
@@ -15,7 +14,7 @@ import java.time.Duration;
 public class RestController {
     private final UserRepository userRepository;
     private final UserActionService userActionService;
-    private final WebClient client;
+    private final TwitterService twitterService;
 
     @GetMapping(value = "/rest/users", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<User> getUsers(){
@@ -32,11 +31,7 @@ public class RestController {
 
     @GetMapping(value = "/rest/users/twits", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Twit> getAllTwits() {
-        return client.get()
-                .uri("/twits")
-                .accept(MediaType.TEXT_EVENT_STREAM)
-                .retrieve()
-                .bodyToFlux(Twit.class);
+        return twitterService.getAllTwits();
     }
 
 }
