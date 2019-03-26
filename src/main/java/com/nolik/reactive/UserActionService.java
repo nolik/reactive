@@ -23,6 +23,11 @@ public class UserActionService {
 
         return Flux.zip(interval, userActions)
                 .map(Tuple2::getT2);
+//                .flatMap(this::actionMediator);
+    }
+
+    private Flux<UserAction> actionMediator(UserAction userAction) {
+        return null;
     }
 
     private String randomAction() {
