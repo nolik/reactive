@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.TEXT_EVENT_STREAM;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 
 
@@ -19,6 +20,7 @@ public class RouteConfig {
     RouterFunction<?> routes(){
         return RouterFunctions. route()
                 .GET("/users", accept(APPLICATION_JSON), userHandler::listOfUsers)
+                .GET("/user/{id}/actions", accept(TEXT_EVENT_STREAM), userHandler::userActions)
                 .build();
     }
 }

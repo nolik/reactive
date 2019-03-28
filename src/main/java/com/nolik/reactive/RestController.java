@@ -25,7 +25,7 @@ public class RestController {
                .map(Tuple2::getT2);
     }
 
-    @GetMapping(value = "/rest/user/{id}/user-actions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/rest/user/{id}/actions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<UserAction> getUserActions(@PathVariable String id) {
        return userActionService.streamUserAction(id);
     }

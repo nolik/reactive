@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.util.function.Tuple2;
 
 import java.time.Duration;
 import java.util.Date;
@@ -15,15 +14,10 @@ import java.util.stream.Stream;
 public class UserActionService {
 
     Flux<UserAction> streamUserAction(String userId) {
-        Flux<Long> interval = Flux.interval(Duration.ofSeconds(1));
-
-        Flux<UserAction> userActions = Flux.fromStream(Stream.generate(
-                () -> new UserAction(userId, new Date(), randomAction())
-        ));
-
-        return Flux.zip(interval, userActions)
-                .map(Tuple2::getT2);
-//                .flatMap(this::actionMediator);
+        return Flux.fromStream(Stream.generate(
+                () -> new UserAction(userId, new Date(), randomAction())))
+                //                .flatMap(this::actionMediator);
+                .delayElements(Duration.ofSeconds(1));
     }
 
     private Flux<UserAction> actionMediator(UserAction userAction) {
@@ -31,7 +25,7 @@ public class UserActionService {
     }
 
     private String randomAction() {
-        String[] actions = {"write twit", "follow" , "unfollow"};
+        String[] actions = {"write twit", "follow", "unfollow"};
         return actions[new Random().nextInt(actions.length)];
     }
 }
